@@ -15,6 +15,7 @@ migrate = Migrate(app, db)
 
 db.init_app(app)
 
+
 @app.route('/')
 def index():
     return "Index for Game/Review/User API"
@@ -22,6 +23,29 @@ def index():
 # start building your API here
 
 
+@app.route('/games')
+def games():
+
+    games = [game.to_dict() for game in Game.qeury.all()]
+
+    response = make_response(games, 200)
+
+    return response
+
+
+@app.route('/games/<int:id>')
+def game_by_id(id):
+    game = Game.query.filter(Game.id == id).first()
+
+    game_dict = game.to_dict()
+
+    response = make_response(
+        game_dict,
+        200
+    )
+
+    return response
+
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
-
